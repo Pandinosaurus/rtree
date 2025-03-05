@@ -3,21 +3,21 @@
 Tutorial
 ------------------------------------------------------------------------------
 
-This tutorial demonstrates how to take advantage of :ref:`Rtree <home>` for 
-querying data that have a spatial component that can be modeled as bounding 
+This tutorial demonstrates how to take advantage of :ref:`Rtree <home>` for
+querying data that have a spatial component that can be modeled as bounding
 boxes.
 
 
 Creating an index
 ..............................................................................
 
-The following section describes the basic instantiation and usage of 
+The following section describes the basic instantiation and usage of
 :ref:`Rtree <home>`.
 
 Import
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-After :ref:`installing <installation>` :ref:`Rtree <home>`, you should be able to 
+After :ref:`installing <installation>` :ref:`Rtree <home>`, you should be able to
 open up a Python prompt and issue the following::
 
   >>> from rtree import index
@@ -30,21 +30,21 @@ with the index.
 Construct an instance
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-After importing the index module, construct an index with the default 
+After importing the index module, construct an index with the default
 construction::
 
   >>> idx = index.Index()
 
 .. note::
 
-    While the default construction is useful in many cases, if you want to 
-    manipulate how the index is constructed you will need pass in a 
-    :py:class:`rtree.index.Property` instance when creating the index. 
+    While the default construction is useful in many cases, if you want to
+    manipulate how the index is constructed you will need pass in a
+    :py:class:`rtree.index.Property` instance when creating the index.
 
 Create a bounding box
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-After instantiating the index, create a bounding box that we can 
+After instantiating the index, create a bounding box that we can
 insert into the index::
 
   >>> left, bottom, right, top = (0.0, 0.0, 1.0, 1.0)
@@ -67,16 +67,16 @@ Insert an entry into the index::
 
 .. note::
 
-    Entries that are inserted into the index are not unique in either the 
-    sense of the `id` or of the bounding box that is inserted with index 
-    entries. If you need to maintain uniqueness, you need to manage that before 
+    Entries that are inserted into the index are not unique in either the
+    sense of the `id` or of the bounding box that is inserted with index
+    entries. If you need to maintain uniqueness, you need to manage that before
     inserting entries into the Rtree.
 
 .. note::
 
     Inserting a point, i.e. where left == right && top == bottom, will
     essentially insert a single point entry into the index instead of copying
-    extra coordinates and inserting them. There is no shortcut to explicitly 
+    extra coordinates and inserting them. There is no shortcut to explicitly
     insert a single point, however.
 
 Query the index
@@ -95,7 +95,7 @@ Given a query window, return ids that are contained within the window::
   >>> list(idx.intersection((1.0, 1.0, 2.0, 2.0)))
   [0]
 
-Given a query window that is beyond the bounds of data we have in the 
+Given a query window that is beyond the bounds of data we have in the
 index::
 
   >>> list(idx.intersection((1.0000001, 1.0000001, 2.0, 2.0)))
@@ -106,7 +106,7 @@ Nearest Neighbors
 
 The following finds the 1 nearest item to the given bounds. If multiple items
 are of equal distance to the bounds, both are returned::
-  
+
   >>> idx.insert(1, (left, bottom, right, top))
   >>> list(idx.nearest((1.0000001, 1.0000001, 2.0, 2.0), 1))
   [0, 1]
@@ -121,7 +121,7 @@ Rtree also supports inserting any object you can pickle into the index (called
 a clustered index in `libspatialindex`_ parlance). The following inserts the
 picklable object ``42`` into the index with the given id::
 
-  >>> idx.insert(id=id, bounds=(left, bottom, right, top), obj=42)
+  >>> idx.insert(id=id, coordinates=(left, bottom, right, top), obj=42)
 
 You can then return a list of objects by giving the ``objects=True`` flag
 to intersection::
@@ -138,10 +138,10 @@ to intersection::
 Serializing your index to a file
 ..............................................................................
 
-One of :ref:`Rtree <home>`'s most useful properties is the ability to 
-serialize Rtree indexes to disk. These include the clustered indexes 
+One of :ref:`Rtree <home>`'s most useful properties is the ability to
+serialize Rtree indexes to disk. These include the clustered indexes
 described :ref:`here <clustered>`::
-  
+
   >>> file_idx = index.Rtree('rtree')
   >>> file_idx.insert(1, (left, bottom, right, top))
   >>> file_idx.insert(2, (left - 1.0, bottom - 1.0, right + 1.0, top + 1.0))
@@ -191,18 +191,20 @@ stored on disk as the files ``3d_index.data`` and ``3d_index.index``::
   >>> p = index.Property()
   >>> p.dimension = 3
   >>> p.dat_extension = 'data'
-  >>> p.idx_extension = 'index'  
+  >>> p.idx_extension = 'index'
   >>> idx3d = index.Index('3d_index',properties=p)
-  >>> idx3d.insert(1, (0, 0, 60, 60, 23.0, 42.0))
-  >>> idx3d.intersection( (-1, -1, 62, 62, 22, 43))
+  >>> idx3d.insert(1, (0, 60, 23.0, 0, 60, 42.0))
+  >>> idx3d.intersection( (-1, 62, 22, -1, 62, 43))
   [1L]
 
 ZODB and Custom Storages
 ..............................................................................
 
-https://mail.zope.org/pipermail/zodb-dev/2010-June/013491.html contains a custom 
-storage backend for `ZODB`_
+https://mail.zope.org/pipermail/zodb-dev/2010-June/013491.html contains a custom
+storage backend for `ZODB`_ and you can find example python code `here`_. Note
+that the code was written in 2011, hasn't been updated and was only an alpha
+version.
 
-.. _ZODB: http://www.zodb.org/
-
-.. _`libspatialindex`: http://libspatialindex.github.com    
+.. _`here`: https://github.com/Toblerity/zope.index.rtree
+.. _`ZODB`: https://zodb.org
+.. _`libspatialindex`: https://libspatialindex.org

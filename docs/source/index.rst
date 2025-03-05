@@ -3,8 +3,8 @@
 Rtree: Spatial indexing for Python
 ------------------------------------------------------------------------------
 
-`Rtree`_ is a `ctypes`_ Python wrapper of `libspatialindex`_ that provides a 
-number of advanced spatial indexing features for the spatially curious Python 
+`Rtree`_ is a `ctypes`_ Python wrapper of `libspatialindex`_ that provides a
+number of advanced spatial indexing features for the spatially curious Python
 user.  These features include:
 
 * Nearest neighbor search
@@ -21,20 +21,20 @@ Documentation
 
 .. toctree::
    :maxdepth: 2
-   
+
    install
    tutorial
    class
+   misc
    changes
    performance
-   examples
    history
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
 
-.. _`R-trees`: http://en.wikipedia.org/wiki/R-tree
-.. _`ctypes`: http://docs.python.org/library/ctypes.html
-.. _`libspatialindex`: http://libspatialindex.github.com
-.. _`Rtree`: http://toblerity.github.com/rtree/
+.. _`R-trees`: https://en.wikipedia.org/wiki/R-tree
+.. _`ctypes`: https://docs.python.org/3/library/ctypes.html
+.. _`libspatialindex`: https://libspatialindex.org
+.. _`Rtree`: https://rtree.readthedocs.io

@@ -1,0 +1,27 @@
+ci:
+  autoupdate_schedule: quarterly
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+    - id: check-yaml
+    - id: end-of-file-fixer
+    - id: trailing-whitespace
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.31.2
+    hooks:
+    - id: check-github-workflows
+      args: ["--verbose"]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.9
+    hooks:
+    # Run the linter
+    - id: ruff
+      args: [ --fix ]
+    # Run the formatter
+    - id: ruff-format
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.15.0
+    hooks:
+    - id: mypy
+      exclude: 'docs/.'
